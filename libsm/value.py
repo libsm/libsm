@@ -17,24 +17,33 @@ class Value:
     def __hash__(self):
         return hash(self.__repr__())
 
+    def __bool__(self):
+        return len(self.__value) > 0
+
     def __lt__(self, other):
-        return self.__value < other.__value
+        return Value(Value()) if self.__value < other.__value else Value()
 
     def __eq__(self, value):
         if len(self.__value) != len(value.__value):
-            return False
+            return Value()
 
         for x, y in zip(self.__value, value.__value):
             if x != y:
-                return False
+                return Value()
 
-        return True
+        return Value(Value())
 
     def __add__(self, other):
-        return Value(*self.__value, *other.__value)
-
-    def __lshift__(self, other):
         return Value(*self.__value, other)
 
-    def __rshift__(self, other):
+    def __sub__(self, other):
         return Value(*[v for v in self.__value if v != other])
+
+    def __mod__(self, other):
+        return Value(*[v for v in self.__value if v not in other])
+
+    def __and__(self, other):
+        return Value(*[v for v in self.__value if v in other])
+
+    def __or__(self, other):
+        return Value(*self.__value, *other.__value)
