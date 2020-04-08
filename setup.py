@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="libsm",
-    version="0.0.2",
+    version="0.1.0",
     author="vang1ong7ang",
     author_email="vang1ong7ang@outlook.com",
     description="An academic library for state machinev specification and model checking",
