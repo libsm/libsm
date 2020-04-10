@@ -38,6 +38,10 @@ class Val:
         return Val()
 
     @classmethod
+    def Set(self, *args):
+        return Val(*args)
+
+    @classmethod
     def First(self, *args):
         if len(args) == 0:
             return Val()

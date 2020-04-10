@@ -1,7 +1,7 @@
 from ...val import Val
 
 
-class Bool(Val):
+class Type(Val):
 
     @classmethod
     def T(self, *args):

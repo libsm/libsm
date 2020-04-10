@@ -4,25 +4,24 @@ from ..val import Val
 
 
 class XML:
-    def __init__(self, filename):
+    def __init__(self, filename, nosolve=None):
         tree = ET.parse(filename)
         self.__workspace = os.path.dirname(filename)
         self.__root = tree.getroot()
+        self.__nosolve = nosolve
 
     def __call__(self, **kwargs):
         assert self.__root.tag == 'libsm'
         assert self.__root.attrib['type'] == 'equation'
 
-        try:
-            root = self.__root[0]
+        root = self.__root[0]
+
+        if self.__nosolve:
             assert root.tag == 'Not'
             root = root[0]
             assert root.tag == 'Equal'
             var, root = root[0], root[1]
-            assert var.tag == 'var'
-            assert var.attrib['name'] == 'S'
-        except:
-            raise 'feature not implemented'
+            assert var.tag == 'sym'
 
         return self.eval(root, **kwargs)
 
@@ -54,5 +53,13 @@ class XML:
 
             return self.eval(node, *values, **kwargs)
 
-        f = getattr(Val, node.tag)
+        val = Val
+
+        if 'package' in node.attrib:
+            val = __import__(node.attrib['package'])
+            for v in node.attrib['package'].split('.')[1:]:
+                val = getattr(val, v)
+            val = val.Type
+
+        f = getattr(val, node.tag)
         return f(*values)

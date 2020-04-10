@@ -1,6 +1,6 @@
 import logging
 from ..val import Val
-from ..std.pair import Pair
+from ..std.pair import Type as Pair
 
 
 class SM:

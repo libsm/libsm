@@ -1,7 +1,7 @@
 from ...val import Val
 
 
-class Pair(Val):
+class Type(Val):
 
     @classmethod
     def Pair(self, *args):
