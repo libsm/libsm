@@ -1,4 +1,6 @@
 import logging
+from ..val import Val
+from ..std.pair import Pair
 
 
 class SM:
@@ -6,8 +8,8 @@ class SM:
 
         self.logger = logging.getLogger(name=logger)
 
-        self.V = set()
-        self.E = set()
+        self.__V = set()
+        self.__E = set()
         N = set()
 
         try:
@@ -23,12 +25,12 @@ class SM:
 
             while True:
                 sn = N.pop()
-                sns = fn(sn)
+                sns = fn(P=sn)
 
-                self.V.add(sn)
+                self.__V.add(sn)
                 for v in sns:
-                    self.E.add((sn, v))
-                    if v in self.V:
+                    self.__E.add((sn, v))
+                    if v in self.__V:
                         continue
                     N.add(v)
 
@@ -37,8 +39,19 @@ class SM:
             self.logger.info('[SM] [LOOP] [DONE]')
             return
 
+    def V(self):
+        return Val(*self.__V)
+
+    def E(self):
+        ret = [Pair.Pair(x, y) for x, y in self.__E]
+        return Val(*ret)
+
     def result(self):
-        return self.V, self.E
+        return self.__V, self.__E
+
+    def verify(self, fv):
+        V, E = self.V(), self.E()
+        assert fv(V=V, E=E) == Val()
 
     @classmethod
     def log(self, sn=None, sns=None):
